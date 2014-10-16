@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Gr-lte receiver by thelegend831</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Gr-lte receiver</h1>
+        <p class="header">GNU Radio LTE receiver</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/thelegend831/gr-lte/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/thelegend831/gr-lte/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/thelegend831/gr-lte">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/thelegend831">thelegend831</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="gnu-radio-lte-receiver" class="anchor" href="#gnu-radio-lte-receiver"><span class="octicon octicon-link"></span></a>GNU Radio LTE Receiver</h1>
+
+<p>The <em>gr-lte</em> project is an Open Source Software Package which aims to provide a GNU Radio LTE Receiver to receive, synchronize and decode LTE signals. Its development was focused on modularity. This makes the project easy to extend and reuse its blocks.</p>
+
+<p>This project was initiated as a Bachelor thesis at the <em>Communication Engineering Lab (CEL)</em> at the <em>Karlsruhe Institute of Technology (KIT)</em>, Germany, <a href="http://www.cel.kit.edu">http://www.cel.kit.edu</a>.</p>
+
+<h2>
+<a name="the-idea" class="anchor" href="#the-idea"><span class="octicon octicon-link"></span></a>The Idea</h2>
+
+<p>This project aims to provide a modular environment for an LTE downlink receiver. All blocks should be replacable. e.g. introduce a new channel estimator block with more advanced algorithms. On the other hand it should be fairly easy to add new blocks to decode additional physical channels.<br>
+The block design aims to be modular and reusable. Where possible GR blocks are used.<br>
+Furthermore message ports are used for configuration on runtime. This is supposed to make the control flow visible to users and thus better understandable.</p>
+
+<h2>
+<a name="capabilities" class="anchor" href="#capabilities"><span class="octicon octicon-link"></span></a>Capabilities</h2>
+
+<p><em>gr-lte</em> provides blocks to synchronize to a LTE downlink signal. It performs OFDM operation to operate in the frequency domain and provides a channel estimator. At this point physical LTE downlink channels can be extracted from the symbols and be processed. PBCH is fully implemented and decodes MIB. PCFICH is available too. Almost all code for PHICH is implemented and there is lots of code to bring PDCCH support. It is not yet possible to just plug it in, though. Eventually all channels shall be supported.</p>
+
+<h2>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<ul>
+<li>
+<p>GNU Radio 3.7</p>
+
+<ul>
+<li>all code was moved to GR 3.7 API.</li>
+<li>old code is not removed so far but should be regarded deprecated.</li>
+</ul>
+</li>
+<li>
+<p>GR 3.6.5.1 (deprecated)</p>
+
+<ul>
+<li>use commit tagged with 'gnuradio-v3.6.5.1'</li>
+<li>message passing API is necessary</li>
+<li>all the latest bug fixes</li>
+<li>project used to use GR 3.6 API</li>
+</ul>
+</li>
+<li>
+<p>MATLAB (deprecated)</p>
+
+<ul>
+<li>R2011b tested</li>
+<li>m-files are replaced by Python/Numpy/Scipy code which offers greater flexibility and connectivity to GNU Radio.</li>
+<li>for .m-files</li>
+<li>If you want, have a look at the m-files</li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a name="buildinstall-instructions-for-linux" class="anchor" href="#buildinstall-instructions-for-linux"><span class="octicon octicon-link"></span></a>Build/Install instructions for Linux</h2>
+
+<ol>
+<li><p>Get, build and install GNU Radio from <a href="http://www.gnuradio.org">http://www.gnuradio.org</a></p></li>
+<li><p>Get <em>gr-lte</em> from github</p></li>
+<li><p>Configure it using CMake<br>
+Assuming you are already in the project folder<br>
+<code>mkdir build</code><br>
+<code>cp cmake_command.sh build/</code><br>
+<code>cd build</code><br>
+<code>./cmake_command.sh</code><br><br>
+This will just run a little script to aid with project setup for Code::Blocks<br>
+Otherwise run <code>cmake ..</code></p></li>
+<li><p>Compile and Install<br>
+<code>make -jX</code> where X is a number of choice (Often the number of cores available)<br>
+<code>sudo make install</code> (make it available in GRC)</p></li>
+<li><p>compile hierarchical GRC blocks<br>
+These blocks are located in the 'examples' directory.<br>
+hierarchical GRC blocks must be generated by opening them in GRC and clicking <code>Generate</code>. Afterwards reload blocks or restart GRC. This makes the hier blocks available in GRC just as all the other blocks.<br>
+An alternative is to use the python script <code>examples/hier_block_install_helper.grc</code>, which calls 'grcc' for all grc files in the current directory and installs them.</p></li>
+<li><p>Have fun<br>
+If everything runs without errors the <em>gr-lte</em> blocks should be available in GRC.<br>
+The flowgraph 'LTE_flowgraph_top_level.grc' is meant as a reference. It is supposed to contain a working flowgraph with all available blocks. Only the source must be updated. Specify the path to your recorded samples and update the resampler parameters.<br>
+By changing the variable 'fftlen' you update a whole bunch of other variables which basically configure the expected bandwidth and the maximum subcarriers the flowgraph can handle.</p></li>
+<li><p>Troubleshooting<br>
+In case you have trouble with parts of the flowgraph etc. write an email preferably to the GNU Radio mailinglist. This way others with the same problem can find hints in the mailinglist archives.</p></li>
+</ol>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
